@@ -82,7 +82,10 @@ fun InputScreen(navController: NavController) { // Cambié el nombre de la funci
         Button(onClick = {
             val p = peso.toFloatOrNull()
             val a = altura.toFloatOrNull()
-            if (p != null && a != null && p > 0 && a > 0) {
+            if (p != null && a != null && p > 0 && a > 0) { // Validé que el peso y la altura sean números válidos y mayores que cero
+                val imc = p / (a * a) // Calculé el IMC usando la fórmula: peso / (altura * altura)
+                val encodedNombre = URLEncoder.encode(nombre, StandardCharsets.UTF_8.toString())
+                navController.navigate("result_screen/$encodedNombre/$imc") // Navegué a la pantalla de resultados pasando el nombre y el IMC como argumentos en la ruta
 
             } else { showError = true }
         }, modifier = Modifier.fillMaxWidth()) { Text("Calcular") }
@@ -96,6 +99,14 @@ fun InputScreen(navController: NavController) { // Cambié el nombre de la funci
 
 @Composable
 fun ResultScreen(navController: NavController, nombre: String, imc: Float) { // Cambié el nombre de la función a ResultScreen y agregué NavController, nombre e imc como parámetros
+    // Lógica para determinar la categoría del IMC y el color correspondiente
+    val (categoria, color) = when {
+        imc < 18.5 -> "Bajo peso" to Color.Red
+        imc < 25.0 -> "Peso normal" to Color.Green
+        imc < 30.0 -> "Sobrepeso" to Color(0xFFFFA500)
+        else -> "Obesidad" to Color.Red
+    }
+    // Interfaz de usuario para mostrar el resultado del IMC
     Column(modifier = Modifier.padding(16.dp)) { // Interfaz de usuario para mostrar el resultado del IMC
         Text("Hola $nombre, tu resultado es:") // Mostré un mensaje de bienvenida con el nombre del usuario
         Text("IMC: ${"%.1f".format(imc)}", style = MaterialTheme.typography.headlineMedium)
