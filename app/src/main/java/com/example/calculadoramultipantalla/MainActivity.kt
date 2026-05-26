@@ -38,6 +38,7 @@ fun InputScreen(navController: NavController) { // Cambié el nombre de la funci
     var nombre by remember { mutableStateOf("") }
     var peso by remember { mutableStateOf("") }
     var altura by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) } // Variable de estado para mostrar el mensaje de error
 
 // Interfaz de usuario para ingresar datos
     Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
@@ -57,9 +58,21 @@ fun InputScreen(navController: NavController) { // Cambié el nombre de la funci
         )
         Spacer(modifier = Modifier.height(16.dp)) // Agregué un espacio antes del botón
 
-        Button(onClick = { }, modifier = Modifier.fillMaxWidth()) { Text("Calcular") }  //Boton para calcular el IMC, aún sin funcionalidad
+        // Botón para calcular el IMC
+        Button(onClick = {
+            val p = peso.toFloatOrNull()
+            val a = altura.toFloatOrNull()
+            if (p != null && a != null && p > 0 && a > 0) {
+
+            } else { showError = true }
+        }, modifier = Modifier.fillMaxWidth()) { Text("Calcular") }
+
+        if (showError) {
+            Text("Por favor, ingresa valores válidos", color = Color.Red)
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
