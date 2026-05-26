@@ -33,6 +33,26 @@ class MainActivity : ComponentActivity() { //Cambié AppCompatActivity por Compo
 }
 
 @Composable
+fun AppNavigation() { // Función para manejar la navegación entre pantallas
+    val navController = rememberNavController() // Creé un NavController para manejar la navegación entre pantallas
+    NavHost(navController = navController, startDestination = "input_screen") { // Definí las rutas para cada pantalla
+        composable("input_screen") { InputScreen(navController) }
+        composable(
+            route = "result_screen/{nombre}/{imc}",
+            arguments = listOf(
+                navArgument("nombre") { type = NavType.StringType }, // Agregué un argumento para el nombre
+                navArgument("imc") { type = NavType.FloatType } // Agregué un argumento para el IMC
+            )
+        ) { backStackEntry ->
+            val nombre = backStackEntry.arguments?.getString("nombre") ?: "" // Obtuve el nombre desde los argumentos de la ruta
+            val imc = backStackEntry.arguments?.getFloat("imc") ?: 0f // Obtuve el IMC desde los argumentos de la ruta
+            ResultScreen(navController, nombre, imc // Pasé el NavController, el nombre y el IMC a la pantalla de resultados
+            )
+        }
+    }
+}
+
+@Composable
 fun InputScreen(navController: NavController) { // Cambié el nombre de la función a InputScreen y agregué NavController como parámetro
     // Variables de estado para los campos de entrada
     var nombre by remember { mutableStateOf("") }
