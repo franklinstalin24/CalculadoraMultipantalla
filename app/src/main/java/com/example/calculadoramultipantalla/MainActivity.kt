@@ -94,6 +94,18 @@ fun InputScreen(navController: NavController) { // Cambié el nombre de la funci
 }
 
 
+@Composable
+fun ResultScreen(navController: NavController, nombre: String, imc: Float) { // Cambié el nombre de la función a ResultScreen y agregué NavController, nombre e imc como parámetros
+    Column(modifier = Modifier.padding(16.dp)) { // Interfaz de usuario para mostrar el resultado del IMC
+        Text("Hola $nombre, tu resultado es:") // Mostré un mensaje de bienvenida con el nombre del usuario
+        Text("IMC: ${"%.1f".format(imc)}", style = MaterialTheme.typography.headlineMedium)
+        Text(text = categoria, color = color, style = MaterialTheme.typography.headlineSmall)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.popBackStack() }) { Text("Volver") } // Agregué un botón para volver a la pantalla de entrada
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun AppPreview() {
